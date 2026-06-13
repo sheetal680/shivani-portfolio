@@ -7,7 +7,7 @@ import CurtainReveal from "./CurtainReveal";
 const education = {
   degree: "B.Tech – Artificial Intelligence & Data Science",
   college: "Lakireddy Bali Reddy College of Engineering, Mylavaram",
-  cgpa: "8.2",
+  cgpa: "8.1",
   graduation: "Expected May 2027",
 };
 

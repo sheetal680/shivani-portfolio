@@ -123,7 +123,7 @@ export default function About() {
             <div className="absolute -bottom-4 -left-4 px-4 py-3 rounded-2xl border border-white/10 bg-[#111113]/90 backdrop-blur-sm shadow-xl">
               <p className="text-xs font-semibold text-purple-400">Education</p>
               <p className="text-sm font-medium text-white mt-0.5">B.Tech AI &amp; DS</p>
-              <p className="text-xs text-gray-400">LBRCE · CGPA 8.2</p>
+              <p className="text-xs text-gray-400">LBRCE · CGPA 8.1</p>
             </div>
           </motion.div>
 
