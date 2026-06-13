@@ -9,8 +9,12 @@ const navLinks = [
   { href: "#experience", label: "Experience" },
   { href: "#projects", label: "Projects" },
   { href: "#skills", label: "Skills" },
+  { href: "#achievements", label: "Achievements" },
   { href: "#contact", label: "Contact" },
 ];
+
+const WHATSAPP_HIRE =
+  "https://wa.me/918977241245?text=Hi%20Shivani!%20I%20came%20across%20your%20portfolio%20and%20I%27d%20like%20to%20discuss%20a%20project%20with%20you.";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -18,7 +22,7 @@ export default function Navbar() {
   const prefersReduced = useReducedMotion();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onScroll = () => setScrolled(window.scrollY > 80);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -27,9 +31,9 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-400 ${
         scrolled
-          ? "bg-[#09090b]/80 backdrop-blur-xl border-b border-white/5 shadow-lg shadow-black/20"
+          ? "bg-black/80 backdrop-blur-xl border-b border-white/10 shadow-lg shadow-black/20"
           : "bg-transparent"
       }`}
     >
@@ -41,15 +45,13 @@ export default function Navbar() {
             className="flex items-center gap-2 font-bold text-white tracking-tight focus:outline-none focus:ring-2 focus:ring-purple-500 rounded-lg"
             aria-label="Shivani Sheetal Palivela, home"
           >
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-600 text-white text-sm font-bold">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-600 text-white text-sm font-bold hover:shadow-lg hover:shadow-purple-500/40 transition-shadow duration-200">
               S
             </span>
-            <span className="hidden sm:inline text-sm font-semibold text-gray-200">
+            <span className="hidden sm:inline text-sm font-semibold text-gray-200 hover:text-white transition-colors">
               Shivani Sheetal Palivela
             </span>
-            <span className="sm:hidden text-sm font-semibold text-gray-200">
-              SSP
-            </span>
+            <span className="sm:hidden text-sm font-semibold text-gray-200">SSP</span>
           </Link>
 
           {/* Desktop nav */}
@@ -58,21 +60,28 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm text-gray-400 hover:text-white transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 rounded"
+                className="relative text-sm text-gray-400 hover:text-white transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 rounded group"
               >
                 {link.label}
+                <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-purple-400 group-hover:w-full transition-all duration-300" />
               </Link>
             ))}
           </nav>
 
           {/* CTA + hamburger */}
           <div className="flex items-center gap-4">
-            <Link
-              href="#contact"
-              className="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-sm font-semibold transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-purple-400"
+            <a
+              href={WHATSAPP_HIRE}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/30 focus:outline-none focus:ring-2 focus:ring-purple-400 relative overflow-hidden group"
             >
-              Hire Me
-            </Link>
+              <span className="relative z-10">Hire Me</span>
+              <span
+                aria-hidden="true"
+                className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12"
+              />
+            </a>
 
             {/* Hamburger */}
             <button
@@ -122,13 +131,15 @@ export default function Navbar() {
                   {link.label}
                 </Link>
               ))}
-              <Link
-                href="#contact"
+              <a
+                href={WHATSAPP_HIRE}
+                target="_blank"
+                rel="noopener noreferrer"
                 onClick={closeMenu}
-                className="mt-2 px-4 py-3 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-sm font-semibold text-center transition-colors"
+                className="mt-2 px-4 py-3 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-sm font-semibold text-center transition-colors focus:outline-none focus:ring-2 focus:ring-purple-400"
               >
                 Hire Me
-              </Link>
+              </a>
             </nav>
           </motion.div>
         )}

@@ -1,6 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
+import SmoothScroll from "@/components/SmoothScroll";
+import CustomCursor from "@/components/CustomCursor";
+import PageLoadIntro from "@/components/PageLoadIntro";
+import ScrollProgressBar from "@/components/ScrollProgressBar";
 
 const geist = Geist({
   variable: "--font-geist-sans",
@@ -30,13 +34,12 @@ export const metadata: Metadata = {
     "Machine Learning",
     "Python Developer",
     "AI Startup",
+    "AI Automation Developer",
   ],
   authors: [{ name: "Shivani Sheetal Palivela" }],
   creator: "Shivani Sheetal Palivela",
   publisher: "Shivani Sheetal Palivela",
-  alternates: {
-    canonical: "/",
-  },
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -60,10 +63,7 @@ export const metadata: Metadata = {
     description: "Co-Founder & CEO of Voxinta. AI Engineer and Entrepreneur.",
     images: ["/opengraph-image"],
   },
-  robots: {
-    index: true,
-    follow: true,
-  },
+  robots: { index: true, follow: true },
 };
 
 export const viewport: Viewport = {
@@ -74,12 +74,15 @@ export const viewport: Viewport = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={geist.variable}>
-      <body>{children}</body>
+      <body>
+        <PageLoadIntro />
+        <ScrollProgressBar />
+        <CustomCursor />
+        <SmoothScroll>{children}</SmoothScroll>
+      </body>
     </html>
   );
 }

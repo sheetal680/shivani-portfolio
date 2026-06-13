@@ -8,10 +8,42 @@ import Link from "next/link";
 const roles = [
   "AI Engineer",
   "Data Scientist",
+  "AI Automation Developer",
   "Full Stack Developer",
   "Entrepreneur",
-  "Co-Founder & CEO of Voxinta",
 ];
+
+const WHATSAPP_HIRE =
+  "https://wa.me/918977241245?text=Hi%20Shivani!%20I%20came%20across%20your%20portfolio%20and%20I%27d%20like%20to%20discuss%20a%20project%20with%20you.";
+
+function SplitTitle({ text }: { text: string }) {
+  const prefersReduced = useReducedMotion();
+  const chars = text.split("");
+  return (
+    <>
+      {chars.map((char, i) => (
+        <motion.span
+          key={i}
+          initial={prefersReduced ? {} : { opacity: 0, y: 50, rotateX: 80 }}
+          animate={{ opacity: 1, y: 0, rotateX: 0 }}
+          transition={
+            prefersReduced
+              ? {}
+              : {
+                  type: "spring",
+                  stiffness: 260,
+                  damping: 20,
+                  delay: 0.25 + i * 0.03,
+                }
+          }
+          style={{ display: "inline-block", whiteSpace: char === " " ? "pre" : undefined }}
+        >
+          {char === " " ? " " : char}
+        </motion.span>
+      ))}
+    </>
+  );
+}
 
 export default function Hero() {
   const [roleIndex, setRoleIndex] = useState(0);
@@ -24,35 +56,41 @@ export default function Hero() {
     return () => clearInterval(interval);
   }, []);
 
-  const fade = prefersReduced
-    ? {}
-    : { initial: { opacity: 0 }, animate: { opacity: 1 } };
-
   return (
     <section
       id="top"
       aria-label="Hero"
       className="relative min-h-screen flex items-center pt-16 overflow-hidden"
     >
-      {/* Background grid */}
+      {/* Animated gradient orbs */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+        <motion.div
+          animate={prefersReduced ? {} : { scale: [1, 1.15, 1], opacity: [0.12, 0.18, 0.12] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute -top-40 -left-40 w-[700px] h-[700px] rounded-full bg-purple-700 blur-[120px]"
+        />
+        <motion.div
+          animate={prefersReduced ? {} : { scale: [1.1, 1, 1.1], opacity: [0.08, 0.14, 0.08] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+          className="absolute -bottom-40 -right-40 w-[600px] h-[600px] rounded-full bg-violet-600 blur-[120px]"
+        />
+        <motion.div
+          animate={prefersReduced ? {} : { scale: [1, 1.2, 1], opacity: [0.06, 0.12, 0.06] }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 4 }}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-indigo-600 blur-[100px]"
+        />
+      </div>
+
+      {/* Grid */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:60px_60px]"
-      />
-      {/* Radial glow */}
-      <div
-        aria-hidden="true"
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-purple-600/10 rounded-full blur-[120px] pointer-events-none"
+        className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff06_1px,transparent_1px),linear-gradient(to_bottom,#ffffff06_1px,transparent_1px)] bg-[size:60px_60px]"
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Text */}
-          <motion.div
-            {...fade}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className="order-2 lg:order-1"
-          >
+          <div className="order-2 lg:order-1">
             <motion.p
               initial={prefersReduced ? {} : { opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
@@ -63,27 +101,26 @@ export default function Hero() {
               Available for opportunities
             </motion.p>
 
-            <motion.h1
-              initial={prefersReduced ? {} : { opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.2 }}
+            <h1
               className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.05] tracking-tight mb-4"
+              style={{ perspective: "600px" }}
             >
-              Shivani{" "}
+              <SplitTitle text="Shivani " />
               <span className="bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
-                Sheetal
-              </span>{" "}
-              Palivela
-            </motion.h1>
+                <SplitTitle text="Sheetal" />
+              </span>
+              {" "}
+              <SplitTitle text="Palivela" />
+            </h1>
 
             {/* Animated role */}
-            <div className="h-10 mb-6 overflow-hidden">
+            <div className="h-10 mb-4 overflow-hidden">
               <AnimatePresence mode="wait">
                 <motion.p
                   key={roleIndex}
-                  initial={prefersReduced ? { opacity: 0 } : { opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={prefersReduced ? { opacity: 0 } : { opacity: 0, y: -20 }}
+                  initial={prefersReduced ? { opacity: 0 } : { opacity: 0, y: 20, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={prefersReduced ? { opacity: 0 } : { opacity: 0, y: -20, scale: 0.95 }}
                   transition={{ duration: 0.35 }}
                   className="text-lg sm:text-xl text-purple-400 font-semibold"
                 >
@@ -95,19 +132,16 @@ export default function Hero() {
             <motion.p
               initial={prefersReduced ? {} : { opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.4 }}
+              transition={{ duration: 0.7, delay: 0.8 }}
               className="text-gray-400 text-base sm:text-lg leading-relaxed mb-8 max-w-lg"
             >
-              Co-Founder &amp; CEO of{" "}
-              <span className="text-purple-400 font-semibold">Voxinta</span> — building
-              AI voice agents, chatbots, and intelligent business solutions. B.Tech AI &amp;
-              Data Science from LBRCE.
+              Building AI voice agents, chatbots, and intelligent automation solutions for real businesses.
             </motion.p>
 
             <motion.div
               initial={prefersReduced ? {} : { opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.6 }}
+              transition={{ duration: 0.7, delay: 1.0 }}
               className="flex flex-wrap gap-4"
             >
               <Link
@@ -119,37 +153,42 @@ export default function Hero() {
                   <path d="M2.5 8h11M9 3.5 13.5 8 9 12.5" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" />
                 </svg>
               </Link>
-              <Link
-                href="#contact"
+              <a
+                href={WHATSAPP_HIRE}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-white/20 hover:border-white/40 text-white font-semibold text-sm transition-all duration-200 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-purple-400"
               >
                 Contact Me
-              </Link>
+              </a>
             </motion.div>
 
             {/* Tech stack pills */}
             <motion.div
               initial={prefersReduced ? {} : { opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.7, delay: 0.8 }}
+              transition={{ duration: 0.7, delay: 1.2 }}
               className="flex flex-wrap gap-2 mt-8"
             >
-              {["Next.js 15", "Python", "AI/ML", "TypeScript", "Voxinta"].map((tech) => (
-                <span
+              {["Python", "AI/ML", "LLMs", "Next.js 15", "Voxinta"].map((tech, i) => (
+                <motion.span
                   key={tech}
+                  initial={prefersReduced ? {} : { opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 1.2 + i * 0.07 }}
                   className="px-3 py-1 rounded-full text-xs font-medium bg-white/5 border border-white/10 text-gray-400"
                 >
                   {tech}
-                </span>
+                </motion.span>
               ))}
             </motion.div>
-          </motion.div>
+          </div>
 
           {/* Photo */}
           <motion.div
-            initial={prefersReduced ? { opacity: 0 } : { opacity: 0, scale: 0.95 }}
+            initial={prefersReduced ? { opacity: 0 } : { opacity: 0, scale: 0.85 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+            transition={{ duration: 0.9, delay: 0.3 }}
             className="order-1 lg:order-2 flex justify-center lg:justify-end"
           >
             <motion.div
@@ -157,25 +196,31 @@ export default function Hero() {
               transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
               className="relative"
             >
-              {/* Glow ring */}
               <div
                 aria-hidden="true"
                 className="absolute -inset-4 rounded-full bg-gradient-to-br from-purple-600/30 to-purple-900/20 blur-xl"
               />
-              {/* Image container */}
               <div className="relative w-64 h-64 sm:w-72 sm:h-72 lg:w-80 lg:h-80 rounded-full overflow-hidden border-2 border-purple-500/30 shadow-2xl shadow-purple-900/40">
                 <Image
-                  src="/images/profes.jpeg"
+                  src="/profess.jpeg"
                   alt="Shivani Sheetal Palivela"
                   fill
                   priority
                   sizes="(max-width: 640px) 256px, (max-width: 1024px) 288px, 320px"
-                  className="object-cover object-[50%_35%]"
+                  className="object-cover object-[50%_30%]"
                 />
               </div>
-              {/* Badge */}
+              {/* Badge with Voxinta logo */}
               <div className="absolute -bottom-2 -right-4 flex items-center gap-2 px-4 py-2 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm shadow-xl">
-                <span className="text-xl" role="img" aria-label="Building">🚀</span>
+                <div className="relative w-7 h-7 rounded-lg overflow-hidden shrink-0">
+                  <Image
+                    src="/companylogo.jpeg"
+                    alt="Voxinta logo"
+                    fill
+                    sizes="28px"
+                    className="object-cover"
+                  />
+                </div>
                 <div>
                   <p className="text-xs font-semibold text-white">Voxinta</p>
                   <p className="text-xs text-gray-400">AI Company</p>
