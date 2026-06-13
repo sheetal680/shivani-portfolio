@@ -35,14 +35,6 @@ const achievements = [
     color: "from-red-500/20 to-rose-500/10",
     border: "hover:border-red-500/40",
   },
-  {
-    icon: "🇮🇳",
-    label: "National Camps — NCC",
-    description:
-      "Competitively selected to represent the battalion at national-level NCC camps.",
-    color: "from-green-500/20 to-emerald-500/10",
-    border: "hover:border-green-500/40",
-  },
 ];
 
 export default function Achievements() {

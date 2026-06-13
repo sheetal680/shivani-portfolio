@@ -200,15 +200,17 @@ export default function Hero() {
                 aria-hidden="true"
                 className="absolute -inset-4 rounded-full bg-gradient-to-br from-purple-600/30 to-purple-900/20 blur-xl"
               />
-              <div className="relative w-64 h-64 sm:w-72 sm:h-72 lg:w-80 lg:h-80 rounded-full overflow-hidden border-2 border-purple-500/30 shadow-2xl shadow-purple-900/40">
-                <Image
-                  src="/profess.jpeg"
-                  alt="Shivani Sheetal Palivela"
-                  fill
-                  priority
-                  sizes="(max-width: 640px) 256px, (max-width: 1024px) 288px, 320px"
-                  className="object-cover object-[50%_30%]"
-                />
+              <div className="relative w-64 h-64 sm:w-72 sm:h-72 lg:w-80 lg:h-80 rounded-full overflow-hidden border-2 border-purple-500/30 shadow-2xl shadow-purple-900/40 bg-[#0a0a0a] flex items-center justify-center">
+                <div className="relative w-48 h-48 sm:w-56 sm:h-56 lg:w-64 lg:h-64">
+                  <Image
+                    src="/companylogo.jpeg"
+                    alt="Voxinta"
+                    fill
+                    priority
+                    sizes="(max-width: 640px) 192px, (max-width: 1024px) 224px, 256px"
+                    className="object-contain p-4"
+                  />
+                </div>
               </div>
               {/* Badge with Voxinta logo */}
               <div className="absolute -bottom-2 -right-4 flex items-center gap-2 px-4 py-2 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm shadow-xl">
