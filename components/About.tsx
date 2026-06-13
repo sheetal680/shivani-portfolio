@@ -1,46 +1,69 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 import { motion, useReducedMotion, useInView } from "framer-motion";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import CurtainReveal from "./CurtainReveal";
 
-const stats = [
-  { value: 10, suffix: "+", label: "AI Projects Shipped" },
-  { value: 1, suffix: "+", label: "Year of Experience" },
-  { value: 15, suffix: "+", label: "Tech Skills" },
-  { value: 1, suffix: "", label: "Startup Founded" },
+const statData = [
+  { value: 10, suffix: "+", label: "AI Projects Shipped", delay: 0 },
+  { value: 1,  suffix: "+", label: "Year of Experience",  delay: 0.15 },
+  { value: 15, suffix: "+", label: "Tech Skills",         delay: 0.30 },
+  { value: 1,  suffix: "",  label: "Startup Founded",     delay: 0.45 },
 ];
 
-function CountUp({ target, suffix }: { target: number; suffix: string }) {
-  const [count, setCount] = useState(0);
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true });
+function StatCard({
+  value, suffix, label, delay,
+}: {
+  value: number; suffix: string; label: string; delay: number;
+}) {
   const prefersReduced = useReducedMotion();
+  const [count, setCount] = useState(0);
+  const [done, setDone] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, amount: 0.5 });
 
   useEffect(() => {
-    if (!inView || prefersReduced) {
-      setCount(target);
-      return;
-    }
-    const duration = 1800;
-    const start = performance.now();
+    if (!isInView) return;
+    if (prefersReduced) { setCount(value); setDone(true); return; }
+    const duration = 2000;
+    let startTime: number | null = null;
     let raf: number;
-    function step(now: number) {
-      const progress = Math.min((now - start) / duration, 1);
-      const ease = 1 - Math.pow(1 - progress, 3);
-      setCount(Math.floor(ease * target));
-      if (progress < 1) raf = requestAnimationFrame(step);
-      else setCount(target);
-    }
+    const step = (timestamp: number) => {
+      if (startTime === null) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.floor(eased * value));
+      if (progress < 1) {
+        raf = requestAnimationFrame(step);
+      } else {
+        setCount(value);
+        setDone(true);
+      }
+    };
     raf = requestAnimationFrame(step);
     return () => cancelAnimationFrame(raf);
-  }, [inView, target, prefersReduced]);
+  }, [isInView, value, prefersReduced]);
 
   return (
-    <span ref={ref} className="text-2xl font-bold text-white tabular-nums">
-      {count}{suffix}
-    </span>
+    <motion.div
+      ref={ref}
+      initial={prefersReduced ? {} : { opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay }}
+      whileHover={prefersReduced ? {} : { y: -4, scale: 1.02 }}
+      className="p-4 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm hover:border-purple-500/40 transition-all duration-300"
+    >
+      <motion.p
+        className="text-2xl font-bold text-white tabular-nums"
+        animate={done && !prefersReduced ? { scale: [1, 1.3, 1] } : {}}
+        transition={{ duration: 0.3 }}
+      >
+        {count}{suffix}
+      </motion.p>
+      <p className="text-sm text-gray-400 mt-1">{label}</p>
+    </motion.div>
   );
 }
 
@@ -63,16 +86,17 @@ export default function About() {
         <motion.p {...fadeUp(0)} className="text-purple-400 font-semibold text-sm uppercase tracking-widest mb-3">
           About Me
         </motion.p>
-        <motion.h2
-          {...fadeUp(0.1)}
-          id="about-heading"
-          className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight tracking-tight mb-16 max-w-2xl"
-        >
-          Building the future with{" "}
-          <span className="bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
-            AI &amp; code
-          </span>
-        </motion.h2>
+        <CurtainReveal delay={0.1}>
+          <h2
+            id="about-heading"
+            className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight tracking-tight mb-16 max-w-2xl"
+          >
+            Building the future with{" "}
+            <span className="bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
+              AI &amp; code
+            </span>
+          </h2>
+        </CurtainReveal>
 
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Photo */}
@@ -99,7 +123,7 @@ export default function About() {
             <div className="absolute -bottom-4 -left-4 px-4 py-3 rounded-2xl border border-white/10 bg-[#111113]/90 backdrop-blur-sm shadow-xl">
               <p className="text-xs font-semibold text-purple-400">Education</p>
               <p className="text-sm font-medium text-white mt-0.5">B.Tech AI &amp; DS</p>
-              <p className="text-xs text-gray-400">LBRCE · CGPA 7.9</p>
+              <p className="text-xs text-gray-400">LBRCE · CGPA 8.2</p>
             </div>
           </motion.div>
 
@@ -127,28 +151,11 @@ export default function About() {
             </motion.div>
 
             {/* Stats */}
-            <motion.div
-              initial={prefersReduced ? {} : { opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="grid grid-cols-2 gap-4"
-            >
-              {stats.map((stat, i) => (
-                <motion.div
-                  key={stat.label}
-                  initial={prefersReduced ? {} : { opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: 0.3 + i * 0.1 }}
-                  whileHover={prefersReduced ? {} : { y: -4, scale: 1.02 }}
-                  className="p-4 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm hover:border-purple-500/40 transition-all duration-300"
-                >
-                  <CountUp target={stat.value} suffix={stat.suffix} />
-                  <p className="text-sm text-gray-400 mt-1">{stat.label}</p>
-                </motion.div>
+            <div className="grid grid-cols-2 gap-4">
+              {statData.map((s) => (
+                <StatCard key={s.label} {...s} />
               ))}
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>

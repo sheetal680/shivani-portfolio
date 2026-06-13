@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
+import CurtainReveal from "./CurtainReveal";
 
 const education = {
   degree: "B.Tech – Artificial Intelligence & Data Science",
@@ -25,19 +26,17 @@ export default function Experience() {
         >
           Experience &amp; Education
         </motion.p>
-        <motion.h2
-          initial={prefersReduced ? {} : { opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          id="experience-heading"
-          className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight tracking-tight mb-16 max-w-2xl"
-        >
-          My journey as a{" "}
-          <span className="bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
-            builder &amp; founder
-          </span>
-        </motion.h2>
+        <CurtainReveal delay={0.1}>
+          <h2
+            id="experience-heading"
+            className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight tracking-tight mb-16 max-w-2xl"
+          >
+            My journey as a{" "}
+            <span className="bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
+              builder &amp; founder
+            </span>
+          </h2>
+        </CurtainReveal>
 
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Voxinta card */}

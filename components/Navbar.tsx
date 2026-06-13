@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import Link from "next/link";
+import MagneticButton from "./MagneticButton";
 
 const navLinks = [
   { href: "#about", label: "About" },
@@ -70,18 +71,20 @@ export default function Navbar() {
 
           {/* CTA + hamburger */}
           <div className="flex items-center gap-4">
-            <a
-              href={WHATSAPP_HIRE}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/30 focus:outline-none focus:ring-2 focus:ring-purple-400 relative overflow-hidden group"
-            >
-              <span className="relative z-10">Hire Me</span>
-              <span
-                aria-hidden="true"
-                className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12"
-              />
-            </a>
+            <MagneticButton className="hidden md:block">
+              <a
+                href={WHATSAPP_HIRE}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/30 focus:outline-none focus:ring-2 focus:ring-purple-400 relative overflow-hidden group"
+              >
+                <span className="relative z-10">Hire Me</span>
+                <span
+                  aria-hidden="true"
+                  className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12"
+                />
+              </a>
+            </MagneticButton>
 
             {/* Hamburger */}
             <button

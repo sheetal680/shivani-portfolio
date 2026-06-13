@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import CurtainReveal from "./CurtainReveal";
 
 const skillCategories = [
   {
@@ -80,19 +81,17 @@ export default function Skills() {
         >
           Technical Skills
         </motion.p>
-        <motion.h2
-          initial={prefersReduced ? {} : { opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          id="skills-heading"
-          className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight tracking-tight mb-16 max-w-2xl"
-        >
-          Tools I work{" "}
-          <span className="bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
-            with
-          </span>
-        </motion.h2>
+        <CurtainReveal delay={0.1}>
+          <h2
+            id="skills-heading"
+            className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight tracking-tight mb-16 max-w-2xl"
+          >
+            Tools I work{" "}
+            <span className="bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
+              with
+            </span>
+          </h2>
+        </CurtainReveal>
 
         <div className="space-y-10">
           {skillCategories.map((cat, ci) => (

@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import CurtainReveal from "./CurtainReveal";
 
 const achievements = [
   {
@@ -52,19 +53,17 @@ export default function Achievements() {
         >
           Achievements
         </motion.p>
-        <motion.h2
-          initial={prefersReduced ? {} : { opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          id="achievements-heading"
-          className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight tracking-tight mb-16 max-w-2xl"
-        >
-          Milestones &amp;{" "}
-          <span className="bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
-            highlights
-          </span>
-        </motion.h2>
+        <CurtainReveal delay={0.1}>
+          <h2
+            id="achievements-heading"
+            className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight tracking-tight mb-16 max-w-2xl"
+          >
+            Milestones &amp;{" "}
+            <span className="bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
+              highlights
+            </span>
+          </h2>
+        </CurtainReveal>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {achievements.map((item, i) => (

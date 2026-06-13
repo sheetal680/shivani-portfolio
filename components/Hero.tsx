@@ -1,9 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import TextScramble from "./TextScramble";
+import MagneticButton from "./MagneticButton";
 
 const roles = [
   "AI Engineer",
@@ -16,45 +18,51 @@ const roles = [
 const WHATSAPP_HIRE =
   "https://wa.me/918977241245?text=Hi%20Shivani!%20I%20came%20across%20your%20portfolio%20and%20I%27d%20like%20to%20discuss%20a%20project%20with%20you.";
 
-function SplitTitle({ text }: { text: string }) {
-  const prefersReduced = useReducedMotion();
-  const chars = text.split("");
-  return (
-    <>
-      {chars.map((char, i) => (
-        <motion.span
-          key={i}
-          initial={prefersReduced ? {} : { opacity: 0, y: 50, rotateX: 80 }}
-          animate={{ opacity: 1, y: 0, rotateX: 0 }}
-          transition={
-            prefersReduced
-              ? {}
-              : {
-                  type: "spring",
-                  stiffness: 260,
-                  damping: 20,
-                  delay: 0.25 + i * 0.03,
-                }
-          }
-          style={{ display: "inline-block", whiteSpace: char === " " ? "pre" : undefined }}
-        >
-          {char === " " ? " " : char}
-        </motion.span>
-      ))}
-    </>
-  );
+function useTypewriter(
+  words: string[],
+  typeSpeed = 80,
+  deleteSpeed = 40,
+  pause = 1800
+) {
+  const [text, setText] = useState("");
+  const [wordIndex, setWordIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const pauseRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    const current = words[wordIndex % words.length];
+    const delay = isDeleting ? deleteSpeed : typeSpeed;
+
+    const timer = setTimeout(() => {
+      if (!isDeleting) {
+        const next = current.slice(0, text.length + 1);
+        setText(next);
+        if (next.length === current.length) {
+          pauseRef.current = setTimeout(() => setIsDeleting(true), pause);
+        }
+      } else {
+        const next = current.slice(0, text.length - 1);
+        setText(next);
+        if (next.length === 0) {
+          setIsDeleting(false);
+          setWordIndex((i) => (i + 1) % words.length);
+        }
+      }
+    }, delay);
+
+    return () => {
+      clearTimeout(timer);
+      if (pauseRef.current) clearTimeout(pauseRef.current);
+    };
+  }, [text, isDeleting, wordIndex, words, typeSpeed, deleteSpeed, pause]);
+
+  return text;
 }
 
 export default function Hero() {
-  const [roleIndex, setRoleIndex] = useState(0);
   const prefersReduced = useReducedMotion();
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setRoleIndex((i) => (i + 1) % roles.length);
-    }, 2400);
-    return () => clearInterval(interval);
-  }, []);
+  const typedText = useTypewriter(roles);
+  const [scrambleTrigger, setScrambleTrigger] = useState(0);
 
   return (
     <section
@@ -101,32 +109,39 @@ export default function Hero() {
               Available for opportunities
             </motion.p>
 
-            <h1
-              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.05] tracking-tight mb-4"
+            {/* Name with TextScramble — re-triggers on hover */}
+            <motion.h1
+              initial={prefersReduced ? {} : { opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.2 }}
+              onMouseEnter={() => setScrambleTrigger((n) => n + 1)}
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight mb-4 cursor-default select-none"
               style={{ perspective: "600px" }}
             >
-              <SplitTitle text="Shivani " />
-              <span className="bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
-                <SplitTitle text="Sheetal" />
-              </span>
-              {" "}
-              <SplitTitle text="Palivela" />
-            </h1>
+              <TextScramble
+                text="Shivani"
+                delay={300}
+                trigger={scrambleTrigger}
+                className="text-white"
+              />{" "}
+              <TextScramble
+                text="Sheetal Palivela"
+                delay={600}
+                trigger={scrambleTrigger}
+                className="bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent"
+              />
+            </motion.h1>
 
-            {/* Animated role */}
-            <div className="h-10 mb-4 overflow-hidden">
-              <AnimatePresence mode="wait">
-                <motion.p
-                  key={roleIndex}
-                  initial={prefersReduced ? { opacity: 0 } : { opacity: 0, y: 20, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={prefersReduced ? { opacity: 0 } : { opacity: 0, y: -20, scale: 0.95 }}
-                  transition={{ duration: 0.35 }}
-                  className="text-lg sm:text-xl text-purple-400 font-semibold"
-                >
-                  {roles[roleIndex]}
-                </motion.p>
-              </AnimatePresence>
+            {/* Typewriter role with glitch */}
+            <div className="h-10 mb-4 flex items-center">
+              <p
+                className="glitch text-lg sm:text-xl text-purple-400 font-semibold"
+                data-text={typedText}
+                aria-label={`Role: ${typedText}`}
+              >
+                {typedText}
+                <span className="animate-pulse text-purple-300 ml-0.5" aria-hidden="true">|</span>
+              </p>
             </div>
 
             <motion.p
@@ -144,23 +159,27 @@ export default function Hero() {
               transition={{ duration: 0.7, delay: 1.0 }}
               className="flex flex-wrap gap-4"
             >
-              <Link
-                href="#projects"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-semibold text-sm transition-all duration-200 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-purple-400"
-              >
-                View Projects
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 16 16" aria-hidden="true">
-                  <path d="M2.5 8h11M9 3.5 13.5 8 9 12.5" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" />
-                </svg>
-              </Link>
-              <a
-                href={WHATSAPP_HIRE}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-white/20 hover:border-white/40 text-white font-semibold text-sm transition-all duration-200 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-purple-400"
-              >
-                Contact Me
-              </a>
+              <MagneticButton>
+                <Link
+                  href="#projects"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-semibold text-sm transition-all duration-200 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-purple-400"
+                >
+                  View Projects
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 16 16" aria-hidden="true">
+                    <path d="M2.5 8h11M9 3.5 13.5 8 9 12.5" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" />
+                  </svg>
+                </Link>
+              </MagneticButton>
+              <MagneticButton>
+                <a
+                  href={WHATSAPP_HIRE}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-white/20 hover:border-white/40 text-white font-semibold text-sm transition-all duration-200 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-purple-400"
+                >
+                  Contact Me
+                </a>
+              </MagneticButton>
             </motion.div>
 
             {/* Tech stack pills */}
@@ -184,7 +203,7 @@ export default function Hero() {
             </motion.div>
           </div>
 
-          {/* Photo */}
+          {/* Logo circle */}
           <motion.div
             initial={prefersReduced ? { opacity: 0 } : { opacity: 0, scale: 0.85 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -212,16 +231,10 @@ export default function Hero() {
                   />
                 </div>
               </div>
-              {/* Badge with Voxinta logo */}
+              {/* Badge */}
               <div className="absolute -bottom-2 -right-4 flex items-center gap-2 px-4 py-2 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm shadow-xl">
                 <div className="relative w-7 h-7 rounded-lg overflow-hidden shrink-0">
-                  <Image
-                    src="/companylogo.jpeg"
-                    alt="Voxinta logo"
-                    fill
-                    sizes="28px"
-                    className="object-cover"
-                  />
+                  <Image src="/companylogo.jpeg" alt="Voxinta logo" fill sizes="28px" className="object-cover" />
                 </div>
                 <div>
                   <p className="text-xs font-semibold text-white">Voxinta</p>
