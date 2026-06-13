@@ -23,7 +23,7 @@ export default function ScrollProgressBar() {
   return (
     <div
       aria-hidden="true"
-      className="fixed top-0 left-0 right-0 h-[2px] z-[100] bg-transparent pointer-events-none"
+      className="fixed top-0 left-0 right-0 h-[2px] sm:h-[3px] z-[100] bg-transparent pointer-events-none"
     >
       <div
         className="h-full bg-gradient-to-r from-purple-600 to-purple-400 transition-[width] duration-100 ease-out"

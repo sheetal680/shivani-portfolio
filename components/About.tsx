@@ -56,13 +56,13 @@ function StatCard({
       className="p-4 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm hover:border-purple-500/40 transition-all duration-300"
     >
       <motion.p
-        className="text-2xl font-bold text-white tabular-nums"
+        className="text-2xl sm:text-3xl font-bold text-white tabular-nums"
         animate={done && !prefersReduced ? { scale: [1, 1.3, 1] } : {}}
         transition={{ duration: 0.3 }}
       >
         {count}{suffix}
       </motion.p>
-      <p className="text-sm text-gray-400 mt-1">{label}</p>
+      <p className="text-xs sm:text-sm text-gray-400 mt-1">{label}</p>
     </motion.div>
   );
 }
@@ -81,7 +81,7 @@ export default function About() {
         };
 
   return (
-    <section id="about" aria-labelledby="about-heading" className="py-20 md:py-32">
+    <section id="about" aria-labelledby="about-heading" className="py-16 md:py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.p {...fadeUp(0)} className="text-purple-400 font-semibold text-sm uppercase tracking-widest mb-3">
           About Me
@@ -89,7 +89,7 @@ export default function About() {
         <CurtainReveal delay={0.1}>
           <h2
             id="about-heading"
-            className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight tracking-tight mb-16 max-w-2xl"
+            className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight tracking-tight mb-12 md:mb-16 max-w-2xl"
           >
             Building the future with{" "}
             <span className="bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
@@ -98,37 +98,40 @@ export default function About() {
           </h2>
         </CurtainReveal>
 
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-20 items-start">
           {/* Photo */}
-          <motion.div {...fadeUp(0.1)} className="relative mx-auto max-w-sm w-full">
-            <div
-              aria-hidden="true"
-              className="absolute -inset-4 rounded-2xl bg-gradient-to-br from-purple-600/20 to-purple-900/10 blur-lg"
-            />
-            <div className="relative aspect-[4/5] rounded-2xl overflow-hidden border border-white/10 bg-white/5 shadow-2xl shadow-purple-900/30">
-              <Image
-                src="/profess.jpeg"
-                alt="Portrait of Shivani Sheetal Palivela"
-                fill
-                sizes="(max-width: 1024px) 100vw, 45vw"
-                className="object-cover object-[50%_25%]"
-              />
+          <motion.div {...fadeUp(0.1)} className="mx-auto w-full max-w-xs sm:max-w-sm">
+            {/* Image container — no relative positioning tricks that clip the badge */}
+            <div className="relative">
               <div
                 aria-hidden="true"
-                className="absolute inset-0 bg-gradient-to-t from-[#09090b]/60 via-transparent to-transparent"
+                className="absolute -inset-4 rounded-2xl bg-gradient-to-br from-purple-600/20 to-purple-900/10 blur-lg"
               />
-            </div>
+              <div className="relative aspect-[4/5] rounded-2xl overflow-hidden border border-white/10 bg-white/5 shadow-2xl shadow-purple-900/30">
+                <Image
+                  src="/profess.jpeg"
+                  alt="Portrait of Shivani Sheetal Palivela"
+                  fill
+                  sizes="(max-width: 640px) 90vw, (max-width: 1024px) 320px, 45vw"
+                  className="object-cover object-[50%_25%]"
+                />
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 bg-gradient-to-t from-[#09090b]/60 via-transparent to-transparent"
+                />
+              </div>
 
-            {/* College badge */}
-            <div className="absolute -bottom-4 -left-4 px-4 py-3 rounded-2xl border border-white/10 bg-[#111113]/90 backdrop-blur-sm shadow-xl">
-              <p className="text-xs font-semibold text-purple-400">Education</p>
-              <p className="text-sm font-medium text-white mt-0.5">B.Tech AI &amp; DS</p>
-              <p className="text-xs text-gray-400">LBRCE · CGPA 8.1</p>
+              {/* College badge — relative on mobile, absolute on sm+ */}
+              <div className="mt-4 sm:mt-0 sm:absolute sm:-bottom-4 sm:-left-4 px-4 py-3 rounded-2xl border border-white/10 bg-[#111113]/90 backdrop-blur-sm shadow-xl w-fit">
+                <p className="text-xs font-semibold text-purple-400">Education</p>
+                <p className="text-sm font-medium text-white mt-0.5">B.Tech AI &amp; DS</p>
+                <p className="text-xs text-gray-400">LBRCE · CGPA 8.1</p>
+              </div>
             </div>
           </motion.div>
 
           {/* Text */}
-          <div>
+          <div className="mt-4 sm:mt-0">
             <motion.div {...fadeUp(0.2)} className="space-y-5 text-gray-400 text-base leading-relaxed mb-10">
               <p>
                 I&apos;m Shivani Sheetal Palivela — an AI Engineer, Data Scientist,
@@ -150,7 +153,7 @@ export default function About() {
               </p>
             </motion.div>
 
-            {/* Stats */}
+            {/* Stats — always 2 columns */}
             <div className="grid grid-cols-2 gap-4">
               {statData.map((s) => (
                 <StatCard key={s.label} {...s} />

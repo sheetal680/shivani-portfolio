@@ -8,7 +8,7 @@ export default function WhatsAppButton() {
   const prefersReduced = useReducedMotion();
 
   return (
-    <div className="fixed bottom-6 right-6 z-50" aria-label="Chat on WhatsApp">
+    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50" aria-label="Chat on WhatsApp">
       {/* Pulse ring */}
       {!prefersReduced && (
         <span
@@ -27,7 +27,7 @@ export default function WhatsAppButton() {
         initial={prefersReduced ? {} : { opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 1.5 }}
-        className="relative flex items-center justify-center w-14 h-14 rounded-full bg-green-500 hover:bg-green-400 shadow-lg shadow-green-500/30 hover:shadow-green-400/50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 focus:ring-offset-[#09090b]"
+        className="relative flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-green-500 hover:bg-green-400 shadow-lg shadow-green-500/30 hover:shadow-green-400/50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 focus:ring-offset-[#09090b]"
       >
         <svg
           className="w-7 h-7 text-white"

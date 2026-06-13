@@ -35,7 +35,7 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" aria-labelledby="contact-heading" className="py-20 md:py-32 bg-[#0d0d0f]">
+    <section id="contact" aria-labelledby="contact-heading" className="py-16 md:py-32 bg-[#0d0d0f]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 items-start">
           {/* Left */}
@@ -186,7 +186,7 @@ export default function Contact() {
                     type="text"
                     required
                     placeholder="Your name"
-                    className="w-full px-4 py-3 rounded-xl border border-white/10 bg-white/5 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
+                    className="w-full px-4 py-3 rounded-xl border border-white/10 bg-white/5 text-white placeholder-gray-500 text-base focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
                   />
                 </div>
 
@@ -201,7 +201,7 @@ export default function Contact() {
                     type="email"
                     required
                     placeholder="your@email.com"
-                    className="w-full px-4 py-3 rounded-xl border border-white/10 bg-white/5 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
+                    className="w-full px-4 py-3 rounded-xl border border-white/10 bg-white/5 text-white placeholder-gray-500 text-base focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
                   />
                 </div>
 
@@ -216,7 +216,7 @@ export default function Contact() {
                     required
                     rows={5}
                     placeholder="Tell me about your project or opportunity..."
-                    className="w-full px-4 py-3 rounded-xl border border-white/10 bg-white/5 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 resize-none"
+                    className="w-full px-4 py-3 rounded-xl border border-white/10 bg-white/5 text-white placeholder-gray-500 text-base focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 resize-none"
                   />
                 </div>
 

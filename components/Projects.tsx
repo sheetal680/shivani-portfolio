@@ -131,7 +131,15 @@ const projects = [
 
 type Project = typeof projects[number];
 
-function ProjectCard({ project, index, prefersReduced }: { project: Project; index: number; prefersReduced: boolean | null }) {
+function ProjectCard({
+  project,
+  index,
+  prefersReduced,
+}: {
+  project: Project;
+  index: number;
+  prefersReduced: boolean | null;
+}) {
   const cardRef = useRef<HTMLDivElement>(null);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -139,10 +147,8 @@ function ProjectCard({ project, index, prefersReduced }: { project: Project; ind
     const rect = cardRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    const rotateX = ((y - centerY) / centerY) * -12;
-    const rotateY = ((x - centerX) / centerX) * 12;
+    const rotateX = ((y - rect.height / 2) / rect.height) * -12;
+    const rotateY = ((x - rect.width / 2) / rect.width) * 12;
     cardRef.current.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.04)`;
     cardRef.current.style.transition = "transform 0.1s ease";
     cardRef.current.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(124,58,237,0.15) 0%, rgba(255,255,255,0.02) 60%)`;
@@ -157,18 +163,17 @@ function ProjectCard({ project, index, prefersReduced }: { project: Project; ind
 
   return (
     <motion.article
-      key={project.title}
       initial={prefersReduced ? {} : { opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.05 }}
       transition={{ duration: 0.5, delay: index * 0.05 }}
-      className="min-w-[300px] md:min-w-[360px] snap-start flex-shrink-0"
+      className="min-w-[280px] md:min-w-[360px] snap-start flex-shrink-0"
     >
       <div
         ref={cardRef}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        className={`group relative p-6 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm ${project.border} hover:shadow-lg hover:shadow-purple-500/10 transition-colors duration-300 flex flex-col h-full transform-gpu will-change-transform`}
+        className={`group relative p-4 sm:p-6 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm ${project.border} hover:shadow-lg hover:shadow-purple-500/10 transition-colors duration-300 flex flex-col h-full transform-gpu will-change-transform`}
       >
         {/* Gradient overlay */}
         <div
@@ -177,20 +182,20 @@ function ProjectCard({ project, index, prefersReduced }: { project: Project; ind
         />
 
         <div className="relative z-10 flex-1 flex flex-col">
-          <div className="text-3xl mb-4" role="img" aria-label={project.title}>
+          <div className="text-2xl sm:text-3xl mb-3" role="img" aria-label={project.title}>
             {project.icon}
           </div>
-          <h3 className="text-lg font-bold text-white mb-2 leading-snug">
+          <h3 className="text-base sm:text-lg font-bold text-white mb-2 leading-snug">
             {project.title}
           </h3>
-          <p className="text-gray-400 text-sm leading-relaxed mb-5 flex-1">
+          <p className="text-gray-400 text-sm leading-relaxed mb-4 flex-1 line-clamp-3 sm:line-clamp-none">
             {project.description}
           </p>
-          <ul className="flex flex-wrap gap-2 mb-4" aria-label="Technologies used">
+          <ul className="flex flex-wrap gap-1.5 sm:gap-2 mb-4" aria-label="Technologies used">
             {project.tags.map((tag) => (
               <li
                 key={tag}
-                className="text-xs px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-gray-300 font-medium"
+                className="text-xs px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-white/5 border border-white/10 text-gray-300 font-medium"
               >
                 {tag}
               </li>
@@ -203,7 +208,7 @@ function ProjectCard({ project, index, prefersReduced }: { project: Project; ind
             className="inline-flex items-center gap-1.5 text-xs text-gray-500 hover:text-purple-400 transition-colors duration-200 group/link focus:outline-none focus:ring-2 focus:ring-purple-500 rounded"
             aria-label={`View ${project.title} on GitHub`}
           >
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <svg className="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z" />
             </svg>
             <span>View on GitHub</span>
@@ -219,7 +224,7 @@ export default function Projects() {
   const prefersReduced = useReducedMotion();
 
   return (
-    <section id="projects" aria-labelledby="projects-heading" className="py-20 md:py-32">
+    <section id="projects" aria-labelledby="projects-heading" className="py-16 md:py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.p
           initial={prefersReduced ? {} : { opacity: 0, y: 20 }}
@@ -246,23 +251,27 @@ export default function Projects() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-gray-400 text-base mb-8 max-w-xl"
+          className="text-gray-400 text-sm sm:text-base mb-6 max-w-xl"
         >
           12 projects spanning AI automation, LLMs, NLP, and full-stack development — each solving a real problem.
         </motion.p>
 
         <div className="relative">
-          {/* Fade edges */}
-          <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-[#09090b] to-transparent z-10 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-[#09090b] to-transparent z-10 pointer-events-none" />
+          {/* Fade edges — hidden on mobile to avoid overlap on small cards */}
+          <div className="hidden sm:block absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-[#09090b] to-transparent z-10 pointer-events-none" />
+          <div className="hidden sm:block absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-[#09090b] to-transparent z-10 pointer-events-none" />
 
-          <p className="text-gray-500 text-sm mb-4 flex items-center gap-2" aria-label="Scrollable list">
-            <span aria-hidden="true">←</span> Scroll to explore <span aria-hidden="true">→</span>
+          <p className="text-gray-500 text-xs sm:text-sm mb-4 flex items-center gap-2" aria-label="Scrollable list">
+            <span aria-hidden="true">←</span> Swipe to explore <span aria-hidden="true">→</span>
           </p>
 
           <div
-            className="flex gap-5 overflow-x-auto pb-6 snap-x snap-mandatory scroll-smooth"
-            style={{ scrollbarWidth: "thin", scrollbarColor: "#7c3aed transparent" }}
+            className="flex gap-4 sm:gap-5 overflow-x-auto pb-6 snap-x snap-mandatory scroll-smooth"
+            style={{
+              scrollbarWidth: "thin",
+              scrollbarColor: "#7c3aed transparent",
+              WebkitOverflowScrolling: "touch",
+            } as React.CSSProperties}
             role="list"
             aria-label="Projects"
           >

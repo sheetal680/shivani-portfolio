@@ -42,7 +42,7 @@ export default function Achievements() {
   const prefersReduced = useReducedMotion();
 
   return (
-    <section id="achievements" aria-labelledby="achievements-heading" className="py-20 md:py-32">
+    <section id="achievements" aria-labelledby="achievements-heading" className="py-16 md:py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.p
           initial={prefersReduced ? {} : { opacity: 0, y: 20 }}
@@ -65,7 +65,7 @@ export default function Achievements() {
           </h2>
         </CurtainReveal>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
           {achievements.map((item, i) => (
             <motion.div
               key={item.label}
