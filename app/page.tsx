@@ -1,3 +1,4 @@
+import GradientOrbs from "@/components/GradientOrbs";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
@@ -15,6 +16,7 @@ export default function Home() {
       <a href="#main-content" className="skip-link">
         Skip to main content
       </a>
+      <GradientOrbs />
       <Navbar />
       <main id="main-content">
         <Hero />
